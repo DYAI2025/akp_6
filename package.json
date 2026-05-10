@@ -9,7 +9,9 @@
     "preview": "vite preview",
     "start": "node server.mjs",
     "typecheck": "tsc --noEmit",
-    "test": "node --test tests/*.test.mjs"
+    "test": "node --test tests/*.test.mjs",
+    "ci": "npm run typecheck && npm test && npm run build && npm run smoke",
+    "smoke": "node tests/production-smoke.mjs"
   },
   "dependencies": {
     "clsx": "2.1.1",

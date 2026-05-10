@@ -47,14 +47,35 @@ export default function App() {
     }
   }, []);
 
-  // Update hash on page change
+  // Keep browser hash and document metadata in sync with the active page.
   useEffect(() => {
-    window.location.hash = currentPage;
-    // Update page title
+    if (window.location.hash !== `#${currentPage}`) {
+      window.location.hash = currentPage;
+    }
+
     const page = pages.find(p => p.id === currentPage);
     if (page) {
       document.title = `${page.title} — AKP Architekten Kauschke + Partner`;
     }
+  }, [currentPage]);
+
+  // Support browser back/forward buttons and manual hash edits.
+  useEffect(() => {
+    const handleHashChange = () => {
+      const pageFromHash = getPageByHash(window.location.hash);
+      if (!pageFromHash || pageFromHash === currentPage) {
+        return;
+      }
+
+      if (pageFromHash !== 'cover') {
+        setCoverOpened(true);
+      }
+      setCurrentPage(pageFromHash);
+      setHistory(prev => (prev.at(-1) === pageFromHash ? prev : [...prev, pageFromHash]));
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
   }, [currentPage]);
 
   // Navigate to page
@@ -70,7 +91,7 @@ export default function App() {
     
     setTimeout(() => {
       setCurrentPage(pageId);
-      setHistory(prev => [...prev, pageId]);
+      setHistory(prev => (prev.at(-1) === pageId ? prev : [...prev, pageId]));
     }, 50);
     
     setTimeout(() => {
@@ -275,7 +296,7 @@ export default function App() {
       ref={containerRef}
       className="fixed inset-0 overflow-hidden bg-[#0a0f0a]"
       style={{ 
-        touchAction: 'none',
+        touchAction: 'pan-y',
         userSelect: 'none'
       }}
     >
@@ -566,7 +587,8 @@ function IndexPage({ entries, onNavigate }: { entries: typeof indexEntries; onNa
       </div>
 
       {/* Grid of index cards */}
-      <div className="flex-1 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 overflow-y-auto pr-2">
+      <div className="flex-1 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 overflow-y-auto pr-2"
+        data-scrollable="true">
         {entries.map((entry, i) => (
           <button
             key={entry.id}
