@@ -183,7 +183,8 @@ export const indexEntries = [
   { id: 'geschichte', number: '09', title: 'Geschichte & Vita', text: 'Internationale Erfahrung seit 1991.' },
   { id: 'publikationen', number: '10', title: 'Veröffentlichungen', text: 'Fachpublikationen und Projektdokumentationen.' },
   { id: 'netzwerk', number: '11', title: 'Netzwerk', text: 'Partner für Tragwerk, Technik und Brandschutz.' },
-  { id: 'kontakt', number: '12', title: 'Kontakt', text: 'Projekte besprechen und Anfragen stellen.' }
+  { id: 'kontakt', number: '12', title: 'Kontakt', text: 'Projekte besprechen und Anfragen stellen.' },
+  { id: 'impressum', number: '13', title: 'Impressum', text: 'Rechtliche Angaben und Bildcredits.' }
 ];
 
 // Kompetenzen data

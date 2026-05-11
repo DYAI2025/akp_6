@@ -7,6 +7,11 @@ const DEFAULT_PORT = 4173;
 const DEFAULT_HOST = '0.0.0.0';
 const DEFAULT_DIST_DIR = resolve('dist');
 
+export function parsePort(value, fallback = DEFAULT_PORT) {
+  const parsed = Number.parseInt(String(value ?? ''), 10);
+  return Number.isInteger(parsed) && parsed > 0 && parsed <= 65535 ? parsed : fallback;
+}
+
 const contentTypes = new Map([
   ['.html', 'text/html; charset=utf-8'],
   ['.css', 'text/css; charset=utf-8'],
@@ -60,13 +65,13 @@ export function createAppServer({ distDir = DEFAULT_DIST_DIR } = {}) {
     const url = request.url ?? '/';
     const pathname = new URL(url, 'http://localhost').pathname;
 
-    if (pathname === '/healthz') {
-      sendText(response, 200, 'ok', 'text/plain; charset=utf-8', method);
+    if (method !== 'GET' && method !== 'HEAD') {
+      sendText(response, 405, 'Method Not Allowed', 'text/plain; charset=utf-8', method);
       return;
     }
 
-    if (method !== 'GET' && method !== 'HEAD') {
-      sendText(response, 405, 'Method Not Allowed', 'text/plain; charset=utf-8', method);
+    if (pathname === '/healthz') {
+      sendText(response, 200, 'ok', 'text/plain; charset=utf-8', method);
       return;
     }
 
@@ -108,7 +113,7 @@ export function createAppServer({ distDir = DEFAULT_DIST_DIR } = {}) {
 }
 
 export function startServer({
-  port = Number.parseInt(process.env.PORT ?? `${DEFAULT_PORT}`, 10),
+  port = parsePort(process.env.PORT, DEFAULT_PORT),
   host = process.env.HOST ?? DEFAULT_HOST,
   distDir = DEFAULT_DIST_DIR,
 } = {}) {

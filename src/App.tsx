@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, type ChangeEvent, type FormEvent } from 'react';
 import {
   indexEntries,
   kompetenzen,
@@ -399,7 +399,8 @@ export default function App() {
                   }} />
                   
                   {/* Page content */}
-                  <div className="relative z-10 w-full h-full overflow-hidden">
+                  <div className="relative z-10 w-full h-full overflow-y-auto overflow-x-hidden"
+                    data-scrollable="true">
                     {renderPageContent(page.id)}
                   </div>
                 </div>
@@ -575,7 +576,7 @@ function CoverPage({ onOpen, isOpened, reducedMotion }: { onOpen: () => void; is
 // Index Page Component
 function IndexPage({ entries, onNavigate }: { entries: typeof indexEntries; onNavigate: (id: PageId) => void }) {
   return (
-    <div className="w-full h-full p-6 md:p-8 lg:p-10 flex flex-col overflow-hidden">
+    <div className="w-full h-full p-6 md:p-8 lg:p-10 flex flex-col overflow-y-auto overflow-x-hidden">
       {/* Header */}
       <div className="mb-6 md:mb-8">
         <h2 className="font-['Playfair_Display'] text-3xl md:text-4xl lg:text-5xl font-medium text-[#1a1a1a] mb-2">
@@ -618,10 +619,10 @@ function IndexPage({ entries, onNavigate }: { entries: typeof indexEntries; onNa
 // Büro & Haltung Page
 function BueroPage() {
   return (
-    <div className="w-full h-full grid grid-cols-12 grid-rows-12 gap-3 p-6 md:p-8 lg:p-10 overflow-hidden">
+    <div className="w-full h-full grid grid-cols-12 grid-rows-12 gap-3 p-6 md:p-8 lg:p-10 overflow-y-auto overflow-x-hidden">
       {/* Main text card - left */}
       <div className="col-span-12 md:col-span-7 row-span-7 p-6 md:p-8 flex flex-col justify-center">
-        <span className="text-[10px] md:text-xs text-[#1a1a1a]/40 tracking-widest uppercase mb-4">02 / Büro & Haltung</span>
+        <span className="text-[10px] md:text-xs text-[#1a1a1a]/40 tracking-widest uppercase mb-4">01 / Büro & Haltung</span>
         <h2 className="font-['Playfair_Display'] text-2xl md:text-3xl lg:text-4xl font-medium text-[#1a1a1a] leading-tight mb-4">
           Kontext statt Stilvorgabe
         </h2>
@@ -675,9 +676,9 @@ function BueroPage() {
 // Leistungen & Prozess Page
 function LeistungenPage({ leistungen: leistungenData, zusatzleistungen }: { leistungen: Array<{number: string; title: string; desc: string}>; zusatzleistungen: string[] }) {
   return (
-    <div className="w-full h-full p-6 md:p-8 lg:p-10 flex flex-col overflow-hidden">
+    <div className="w-full h-full p-6 md:p-8 lg:p-10 flex flex-col overflow-y-auto overflow-x-hidden">
       <div className="mb-6">
-        <span className="text-[10px] md:text-xs text-[#1a1a1a]/40 tracking-widest uppercase mb-2 block">03 / Leistungen</span>
+        <span className="text-[10px] md:text-xs text-[#1a1a1a]/40 tracking-widest uppercase mb-2 block">02 / Leistungen</span>
         <h2 className="font-['Playfair_Display'] text-2xl md:text-3xl lg:text-4xl font-medium text-[#1a1a1a]">
           Leistungen & Prozess
         </h2>
@@ -742,9 +743,9 @@ function ProjektePage({
   const filters = ['alle', 'wohnen', 'gesundheit', 'gewerbe', 'bestand'];
   
   return (
-    <div className="w-full h-full p-6 md:p-8 lg:p-10 flex flex-col overflow-hidden">
+    <div className="w-full h-full p-6 md:p-8 lg:p-10 flex flex-col overflow-y-auto overflow-x-hidden">
       <div className="mb-4">
-        <span className="text-[10px] md:text-xs text-[#1a1a1a]/40 tracking-widest uppercase mb-2 block">04 / Projektarchiv</span>
+        <span className="text-[10px] md:text-xs text-[#1a1a1a]/40 tracking-widest uppercase mb-2 block">03 / Projektarchiv</span>
         <h2 className="font-['Playfair_Display'] text-2xl md:text-3xl lg:text-4xl font-medium text-[#1a1a1a]">
           Projektarchiv
         </h2>
@@ -812,7 +813,7 @@ function ProjektePage({
 // Wohnen & Stadtreparatur Page
 function WohnenPage({ projects }: { projects: Project[] }) {
   return (
-    <div className="w-full h-full grid grid-cols-12 grid-rows-12 gap-3 p-6 md:p-8 lg:p-10 overflow-hidden">
+    <div className="w-full h-full grid grid-cols-12 grid-rows-12 gap-3 p-6 md:p-8 lg:p-10 overflow-y-auto overflow-x-hidden">
       {/* Large image */}
       <div className="col-span-12 md:col-span-8 row-span-6 relative overflow-hidden">
         <img 
@@ -828,7 +829,7 @@ function WohnenPage({ projects }: { projects: Project[] }) {
 
       {/* Text content */}
       <div className="col-span-12 md:col-span-4 row-span-6 p-5 flex flex-col justify-center">
-        <span className="text-[10px] text-[#1a1a1a]/40 tracking-widest uppercase mb-3">05 / Wohnen</span>
+        <span className="text-[10px] text-[#1a1a1a]/40 tracking-widest uppercase mb-3">04 / Wohnen</span>
         <h2 className="font-['Playfair_Display'] text-xl md:text-2xl lg:text-3xl font-medium text-[#1a1a1a] leading-tight mb-4">
           Wohnen &<br />Stadtreparatur
         </h2>
@@ -880,7 +881,7 @@ function WohnenPage({ projects }: { projects: Project[] }) {
 // Gesundheit Page
 function GesundheitPage() {
   return (
-    <div className="w-full h-full grid grid-cols-12 grid-rows-12 gap-3 p-6 md:p-8 lg:p-10 overflow-hidden">
+    <div className="w-full h-full grid grid-cols-12 grid-rows-12 gap-3 p-6 md:p-8 lg:p-10 overflow-y-auto overflow-x-hidden">
       {/* Panoramic image */}
       <div className="col-span-12 row-span-6 relative overflow-hidden">
         <img 
@@ -890,7 +891,7 @@ function GesundheitPage() {
         />
         <div className="absolute inset-0 bg-gradient-to-r from-black/30 to-transparent" />
         <div className="absolute top-6 left-6 max-w-md">
-          <span className="text-[10px] text-white/50 tracking-widest uppercase mb-2 block">06 / Gesundheit</span>
+          <span className="text-[10px] text-white/50 tracking-widest uppercase mb-2 block">05 / Gesundheit</span>
           <h2 className="font-['Playfair_Display'] text-2xl md:text-3xl text-white leading-tight">
             Gesundheit, Pflege &<br />öffentliche Bauten
           </h2>
@@ -929,7 +930,7 @@ function GesundheitPage() {
 // Gewerbe Page
 function GewerbePage({ projects }: { projects: Project[] }) {
   return (
-    <div className="w-full h-full grid grid-cols-12 grid-rows-12 gap-3 p-6 md:p-8 lg:p-10 overflow-hidden">
+    <div className="w-full h-full grid grid-cols-12 grid-rows-12 gap-3 p-6 md:p-8 lg:p-10 overflow-y-auto overflow-x-hidden">
       {/* Image */}
       <div className="col-span-12 md:col-span-6 row-span-6 relative overflow-hidden">
         <img 
@@ -941,7 +942,7 @@ function GewerbePage({ projects }: { projects: Project[] }) {
 
       {/* Text */}
       <div className="col-span-12 md:col-span-6 row-span-6 p-6 flex flex-col justify-center">
-        <span className="text-[10px] text-[#1a1a1a]/40 tracking-widest uppercase mb-3">07 / Gewerbe</span>
+        <span className="text-[10px] text-[#1a1a1a]/40 tracking-widest uppercase mb-3">06 / Gewerbe</span>
         <h2 className="font-['Playfair_Display'] text-2xl md:text-3xl font-medium text-[#1a1a1a] leading-tight mb-4">
           Gewerbe, Industrie &<br />Logistik
         </h2>
@@ -977,10 +978,10 @@ function GewerbePage({ projects }: { projects: Project[] }) {
 // Bestand Page
 function BestandPage() {
   return (
-    <div className="w-full h-full grid grid-cols-12 grid-rows-12 gap-3 p-6 md:p-8 lg:p-10 overflow-hidden">
+    <div className="w-full h-full grid grid-cols-12 grid-rows-12 gap-3 p-6 md:p-8 lg:p-10 overflow-y-auto overflow-x-hidden">
       {/* Main content */}
       <div className="col-span-12 md:col-span-7 row-span-6 p-6 flex flex-col justify-center">
-        <span className="text-[10px] text-[#1a1a1a]/40 tracking-widest uppercase mb-3">08 / Bestand</span>
+        <span className="text-[10px] text-[#1a1a1a]/40 tracking-widest uppercase mb-3">07 / Bestand</span>
         <h2 className="font-['Playfair_Display'] text-2xl md:text-3xl font-medium text-[#1a1a1a] leading-tight mb-4">
           Bestand, Sanierung &<br />Modernisierung
         </h2>
@@ -1030,9 +1031,9 @@ function BestandPage() {
 // Kompetenzen Page
 function KompetenzenPage({ data }: { data: typeof kompetenzen }) {
   return (
-    <div className="w-full h-full p-6 md:p-8 lg:p-10 flex flex-col overflow-hidden">
+    <div className="w-full h-full p-6 md:p-8 lg:p-10 flex flex-col overflow-y-auto overflow-x-hidden">
       <div className="mb-6">
-        <span className="text-[10px] text-[#1a1a1a]/40 tracking-widest uppercase mb-2 block">09 / Kompetenzen</span>
+        <span className="text-[10px] text-[#1a1a1a]/40 tracking-widest uppercase mb-2 block">08 / Kompetenzen</span>
         <h2 className="font-['Playfair_Display'] text-2xl md:text-3xl lg:text-4xl font-medium text-[#1a1a1a]">
           Kompetenzen
         </h2>
@@ -1067,9 +1068,9 @@ function KompetenzenPage({ data }: { data: typeof kompetenzen }) {
 // Geschichte & Vita Page
 function GeschichtePage({ timeline }: { timeline: Array<{year: string; title: string; text: string}> }) {
   return (
-    <div className="w-full h-full p-6 md:p-8 lg:p-10 flex flex-col overflow-hidden">
+    <div className="w-full h-full p-6 md:p-8 lg:p-10 flex flex-col overflow-y-auto overflow-x-hidden">
       <div className="mb-6">
-        <span className="text-[10px] text-[#1a1a1a]/40 tracking-widest uppercase mb-2 block">10 / Geschichte</span>
+        <span className="text-[10px] text-[#1a1a1a]/40 tracking-widest uppercase mb-2 block">09 / Geschichte</span>
         <h2 className="font-['Playfair_Display'] text-2xl md:text-3xl lg:text-4xl font-medium text-[#1a1a1a]">
           Geschichte & Vita
         </h2>
@@ -1121,9 +1122,9 @@ function GeschichtePage({ timeline }: { timeline: Array<{year: string; title: st
 // Publikationen Page
 function PublikationenPage({ data }: { data: typeof publikationen }) {
   return (
-    <div className="w-full h-full p-6 md:p-8 lg:p-10 flex flex-col overflow-hidden">
+    <div className="w-full h-full p-6 md:p-8 lg:p-10 flex flex-col overflow-y-auto overflow-x-hidden">
       <div className="mb-6">
-        <span className="text-[10px] text-[#1a1a1a]/40 tracking-widest uppercase mb-2 block">11 / Veröffentlichungen</span>
+        <span className="text-[10px] text-[#1a1a1a]/40 tracking-widest uppercase mb-2 block">10 / Veröffentlichungen</span>
         <h2 className="font-['Playfair_Display'] text-2xl md:text-3xl lg:text-4xl font-medium text-[#1a1a1a]">
           Veröffentlichungen
         </h2>
@@ -1156,9 +1157,9 @@ function PublikationenPage({ data }: { data: typeof publikationen }) {
 // Netzwerk Page
 function NetzwerkPage({ data }: { data: typeof netzwerk }) {
   return (
-    <div className="w-full h-full p-6 md:p-8 lg:p-10 flex flex-col overflow-hidden">
+    <div className="w-full h-full p-6 md:p-8 lg:p-10 flex flex-col overflow-y-auto overflow-x-hidden">
       <div className="mb-6">
-        <span className="text-[10px] text-[#1a1a1a]/40 tracking-widest uppercase mb-2 block">12 / Netzwerk</span>
+        <span className="text-[10px] text-[#1a1a1a]/40 tracking-widest uppercase mb-2 block">11 / Netzwerk</span>
         <h2 className="font-['Playfair_Display'] text-2xl md:text-3xl lg:text-4xl font-medium text-[#1a1a1a]">
           Netzwerk
         </h2>
@@ -1206,16 +1207,16 @@ function KontaktPage() {
 
   const [formStatus, setFormStatus] = useState<string | null>(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handlePrivacyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePrivacyChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({ ...prev, privacyAccepted: e.target.checked }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim() || !formData.privacyAccepted) {
@@ -1241,10 +1242,10 @@ function KontaktPage() {
   };
 
   return (
-    <div className="w-full h-full grid grid-cols-12 grid-rows-12 gap-3 p-6 md:p-8 lg:p-10 overflow-hidden">
+    <div className="w-full h-full grid grid-cols-12 grid-rows-12 gap-3 p-6 md:p-8 lg:p-10 overflow-y-auto overflow-x-hidden">
       {/* Contact info */}
       <div className="col-span-12 md:col-span-5 row-span-8 p-6 flex flex-col justify-center bg-[#1a1f1a] text-[#f5f2ed]">
-        <span className="text-[10px] text-[#f5f2ed]/40 tracking-widest uppercase mb-3">13 / Kontakt</span>
+        <span className="text-[10px] text-[#f5f2ed]/40 tracking-widest uppercase mb-3">12 / Kontakt</span>
         <h2 className="font-['Playfair_Display'] text-2xl md:text-3xl font-medium mb-6">
           Projekt besprechen
         </h2>
@@ -1283,10 +1284,12 @@ function KontaktPage() {
         <form className="space-y-4" onSubmit={handleSubmit} noValidate>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="text-xs text-[#1a1a1a]/50 block mb-1">Name *</label>
+              <label htmlFor="contact-name" className="text-xs text-[#1a1a1a]/50 block mb-1">Name *</label>
               <input 
                 type="text" 
+                id="contact-name"
                 name="name"
+                autoComplete="name"
                 value={formData.name}
                 onChange={handleChange}
                 className="w-full p-2 border border-[#1a1a1a]/10 bg-white/50 text-sm focus:border-[#1a1a1a]/30 outline-none"
@@ -1294,10 +1297,12 @@ function KontaktPage() {
               />
             </div>
             <div>
-              <label className="text-xs text-[#1a1a1a]/50 block mb-1">E-Mail *</label>
+              <label htmlFor="contact-email" className="text-xs text-[#1a1a1a]/50 block mb-1">E-Mail *</label>
               <input 
                 type="email" 
+                id="contact-email"
                 name="email"
+                autoComplete="email"
                 value={formData.email}
                 onChange={handleChange}
                 className="w-full p-2 border border-[#1a1a1a]/10 bg-white/50 text-sm focus:border-[#1a1a1a]/30 outline-none"
@@ -1307,18 +1312,21 @@ function KontaktPage() {
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="text-xs text-[#1a1a1a]/50 block mb-1">Telefon</label>
+              <label htmlFor="contact-phone" className="text-xs text-[#1a1a1a]/50 block mb-1">Telefon</label>
               <input 
                 type="tel" 
+                id="contact-phone"
                 name="phone"
+                autoComplete="tel"
                 value={formData.phone}
                 onChange={handleChange}
                 className="w-full p-2 border border-[#1a1a1a]/10 bg-white/50 text-sm focus:border-[#1a1a1a]/30 outline-none"
               />
             </div>
             <div>
-              <label className="text-xs text-[#1a1a1a]/50 block mb-1">Projekttyp</label>
+              <label htmlFor="contact-project-type" className="text-xs text-[#1a1a1a]/50 block mb-1">Projekttyp</label>
               <select 
+                id="contact-project-type"
                 name="projectType"
                 value={formData.projectType}
                 onChange={handleChange}
@@ -1335,18 +1343,21 @@ function KontaktPage() {
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="text-xs text-[#1a1a1a]/50 block mb-1">Ort des Projekts</label>
+              <label htmlFor="contact-location" className="text-xs text-[#1a1a1a]/50 block mb-1">Ort des Projekts</label>
               <input 
                 type="text" 
+                id="contact-location"
                 name="location"
+                autoComplete="address-level2"
                 value={formData.location}
                 onChange={handleChange}
                 className="w-full p-2 border border-[#1a1a1a]/10 bg-white/50 text-sm focus:border-[#1a1a1a]/30 outline-none"
               />
             </div>
             <div>
-              <label className="text-xs text-[#1a1a1a]/50 block mb-1">Leistungsphase / Anliegen</label>
+              <label htmlFor="contact-phase" className="text-xs text-[#1a1a1a]/50 block mb-1">Leistungsphase / Anliegen</label>
               <select 
+                id="contact-phase"
                 name="phase"
                 value={formData.phase}
                 onChange={handleChange}
@@ -1361,9 +1372,10 @@ function KontaktPage() {
             </div>
           </div>
           <div>
-            <label className="text-xs text-[#1a1a1a]/50 block mb-1">Budgetrahmen</label>
+            <label htmlFor="contact-budget" className="text-xs text-[#1a1a1a]/50 block mb-1">Budgetrahmen</label>
             <input 
               type="text" 
+              id="contact-budget"
               name="budget"
               value={formData.budget}
               onChange={handleChange}
@@ -1372,8 +1384,9 @@ function KontaktPage() {
             />
           </div>
           <div>
-            <label className="text-xs text-[#1a1a1a]/50 block mb-1">Nachricht *</label>
+            <label htmlFor="contact-message" className="text-xs text-[#1a1a1a]/50 block mb-1">Nachricht *</label>
             <textarea 
+              id="contact-message"
               name="message"
               value={formData.message}
               onChange={handleChange}
@@ -1382,17 +1395,18 @@ function KontaktPage() {
               required
             />
           </div>
-          <label className="flex items-center gap-2 text-xs text-[#1a1a1a]/50">
+          <div className="flex items-center gap-2 text-xs text-[#1a1a1a]/50">
             <input
               type="checkbox"
+              id="contact-privacy"
               name="privacyAccepted"
               checked={formData.privacyAccepted}
               onChange={handlePrivacyChange}
               className="h-4 w-4 accent-[#1a1f1a]"
               required
             />
-            <span>Ich stimme der Datenverarbeitung zur Bearbeitung meiner Anfrage zu.</span>
-          </label>
+            <label htmlFor="contact-privacy">Ich stimme der Datenverarbeitung zur Bearbeitung meiner Anfrage zu.</label>
+          </div>
           {formStatus && (
             <p className="text-xs text-[#1a1a1a]/60" role="status">
               {formStatus}
@@ -1410,7 +1424,7 @@ function KontaktPage() {
       {/* Bottom info */}
       <div className="col-span-12 row-span-3 flex items-center justify-center">
         <p className="text-[10px] text-[#1a1a1a]/30 tracking-wider">
-          DATEI-UPLOAD OPTIONAL · DATENSCHUTZBESTÄTIGUNG PLATZHALTER
+          DATEI-UPLOAD OPTIONAL NACH ERSTKONTAKT · DATENSCHUTZBESTÄTIGUNG ERFORDERLICH
         </p>
       </div>
     </div>
@@ -1420,9 +1434,9 @@ function KontaktPage() {
 // Impressum Page
 function ImpressumPage() {
   return (
-    <div className="w-full h-full p-6 md:p-8 lg:p-10 flex flex-col overflow-hidden">
+    <div className="w-full h-full p-6 md:p-8 lg:p-10 flex flex-col overflow-y-auto overflow-x-hidden">
       <div className="mb-6">
-        <span className="text-[10px] text-[#1a1a1a]/40 tracking-widest uppercase mb-2 block">14 / Impressum</span>
+        <span className="text-[10px] text-[#1a1a1a]/40 tracking-widest uppercase mb-2 block">13 / Impressum</span>
         <h2 className="font-['Playfair_Display'] text-2xl md:text-3xl font-medium text-[#1a1a1a]">
           Impressum
         </h2>
