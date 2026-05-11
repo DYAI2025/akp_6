@@ -65,10 +65,20 @@ test('navigation and index data stay consistent', () => {
   assert.ok(pageIds.has('cover'));
   assert.ok(pageIds.has('impressum'));
 
-  for (const entry of indexEntries) {
+  const indexedContentPageIds = new Set(indexEntries.map((entry) => entry.id));
+  assert.deepEqual(
+    pages.filter((page) => !['cover', 'index'].includes(page.id)).map((page) => page.id),
+    indexEntries.map((entry) => entry.id),
+    'index entries should expose every content page in page order'
+  );
+
+  for (const [index, entry] of indexEntries.entries()) {
+    assert.equal(entry.number, String(index + 1).padStart(2, '0'), `index number for ${entry.id} must be sequential`);
     assert.ok(pageIds.has(entry.id), `index entry ${entry.id} must point to an existing page`);
     assert.notEqual(entry.id, 'cover', 'cover must not be listed as content chapter');
   }
+
+  assert.ok(indexedContentPageIds.has('impressum'), 'impressum should be reachable from the index');
 });
 
 test('project data has unique ids and valid categories', () => {

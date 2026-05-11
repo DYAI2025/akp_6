@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { mkdir, rm } from 'node:fs/promises';
+import { mkdir, readFile, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { after, before, test } from 'node:test';
 import { createElement } from 'react';
@@ -41,4 +41,14 @@ test('initial frontend render exposes the cover content and image alternatives',
   assert.match(html, /Architektur und Generalplanung aus Berlin/);
   assert.match(html, /Projektvisualisierung aus dem AKP-Archiv/);
   assert.match(html, /Scrollen oder klicken zum Öffnen/);
+});
+
+
+test('frontend source keeps legal content reachable and avoids visible placeholder copy', async () => {
+  const source = await readFile(join(process.cwd(), 'src', 'App.tsx'), 'utf8');
+
+  assert.doesNotMatch(source, /PLATZHALTER/);
+  assert.match(source, /id="contact-privacy"/);
+  assert.match(source, /htmlFor="contact-privacy"/);
+  assert.match(source, /overflow-y-auto overflow-x-hidden/);
 });

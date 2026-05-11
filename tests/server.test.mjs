@@ -3,7 +3,7 @@ import { mkdir, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { after, before, test } from 'node:test';
-import { createAppServer, safeResolve } from '../server.mjs';
+import { createAppServer, parsePort, safeResolve } from '../server.mjs';
 
 let tempDir;
 let server;
@@ -33,6 +33,13 @@ after(async () => {
   if (tempDir) {
     await rm(tempDir, { recursive: true, force: true });
   }
+});
+
+test('parsePort accepts Railway-compatible ports and falls back from invalid input', () => {
+  assert.equal(parsePort('3000'), 3000);
+  assert.equal(parsePort('0', 8080), 8080);
+  assert.equal(parsePort('70000', 8080), 8080);
+  assert.equal(parsePort('not-a-port', 8080), 8080);
 });
 
 test('safeResolve keeps requests inside the build directory', () => {
@@ -65,6 +72,9 @@ test('does not hide missing static assets behind the SPA fallback', async () => 
 
   const unsupportedMethod = await request('/kontakt', { method: 'POST' });
   assert.equal(unsupportedMethod.status, 405);
+
+  const unsupportedHealthMethod = await request('/healthz', { method: 'POST' });
+  assert.equal(unsupportedHealthMethod.status, 405);
 });
 
 test('HEAD requests expose metadata without a response body', async () => {
