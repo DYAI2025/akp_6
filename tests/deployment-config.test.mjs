@@ -15,14 +15,17 @@ test('package scripts keep the Railway deployment path reproducible', async () =
   assert.match(packageJson.scripts.ci, /npm test/);
   assert.match(packageJson.scripts.ci, /npm run build/);
   assert.match(packageJson.scripts.ci, /npm run smoke/);
-  assert.match(packageJson.engines.node, /^>=20\.19\.0/);
+  assert.equal(packageJson.packageManager, 'npm@11.4.2');
+  assert.equal(packageJson.engines.node, '20.x');
+  assert.equal(packageJson.engines.npm, '>=11 <12');
 });
 
 test('Railway config builds the Vite app and validates the production server healthcheck', async () => {
   const railwayToml = await readFile('railway.toml', 'utf8');
 
   assert.match(railwayToml, /builder\s*=\s*"NIXPACKS"/);
-  assert.match(railwayToml, /buildCommand\s*=\s*"npm ci && npm run build"/);
+  assert.match(railwayToml, /buildCommand\s*=\s*"npm run build"/);
+  assert.doesNotMatch(railwayToml, /buildCommand\s*=\s*"npm ci && npm run build"/);
   assert.match(railwayToml, /startCommand\s*=\s*"npm start"/);
   assert.match(railwayToml, /healthcheckPath\s*=\s*"\/healthz"/);
 });
