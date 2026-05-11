@@ -32,6 +32,8 @@
     "vite-plugin-singlefile": "2.3.0"
   },
   "engines": {
-    "node": ">=20.19.0"
-  }
+    "node": "20.x",
+    "npm": ">=11 <12"
+  },
+  "packageManager": "npm@11.4.2"
 }
